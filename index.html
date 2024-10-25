@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Timeline</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: white;
+        }
+        .timeline {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+        }
+        .timeline-track {
+            height: 4px;
+            background: #eee;
+            position: relative;
+            margin: 50px 0;
+        }
+        .timeline-progress {
+            position: absolute;
+            height: 100%;
+            background: #0077ff;
+            transition: width 0.3s ease;
+        }
+        .phases {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        .phase {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            padding: 0 5px;
+        }
+        .phase-dot {
+            width: 20px;
+            height: 20px;
+            background: #eee;
+            border-radius: 50%;
+            margin: -12px auto 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .phase.active .phase-dot {
+            background: #0077ff;
+        }
+        .phase.complete .phase-dot {
+            background: #00c853;
+        }
+        .phase-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+            word-wrap: break-word;
+        }
+        .phase-duration {
+            font-size: 12px;
+            color: #666;
+        }
+        .phase.active .phase-name {
+            color: #0077ff;
+        }
+        @media (max-width: 600px) {
+            .phase-name {
+                font-size: 11px;
+            }
+            .phase-duration {
+                font-size: 9px;
+            }
+            body {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="timeline">
+        <div class="timeline-track">
+            <div class="timeline-progress" id="progress"></div>
+        </div>
+        <div class="phases">
+            <div class="phase" id="phase1">
+                <div class="phase-dot"></div>
+                <div class="phase-name">Technical Discovery</div>
+                <div class="phase-duration">Weeks 1-2</div>
+            </div>
+            <div class="phase" id="phase2">
+                <div class="phase-dot"></div>
+                <div class="phase-name">Pilot Implementation</div>
+                <div class="phase-duration">Weeks 3-4</div>
+            </div>
+            <div class="phase" id="phase3">
+                <div class="phase-dot"></div>
+                <div class="phase-name">Training & Optimization</div>
+                <div class="phase-duration">Weeks 5-6</div>
+            </div>
+            <div class="phase" id="phase4">
+                <div class="phase-dot"></div>
+                <div class="phase-name">Scaling & Integration</div>
+                <div class="phase-duration">Weeks 7-8</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let currentPhase = 0;
+        let progress = 0;
+        const phases = document.querySelectorAll('.phase');
+        const progressBar = document.getElementById('progress');
+
+        function updateTimeline() {
+            progress += 2;
+            if (progress > 100) {
+                progress = 0;
+                phases[currentPhase].classList.remove('active');
+                phases[currentPhase].classList.add('complete');
+                currentPhase = (currentPhase + 1) % phases.length;
+                if (currentPhase === 0) {
+                    phases.forEach(phase => phase.classList.remove('complete'));
+                }
+            }
+            
+            phases[currentPhase].classList.add('active');
+            progressBar.style.width = ((currentPhase * 100 / phases.length) + (progress / phases.length)) + '%';
+        }
+
+        setInterval(updateTimeline, 160);
+    </script>
+</body>
+</html>
