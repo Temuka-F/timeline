@@ -353,7 +353,7 @@
 
         <div class="progress-info">
             <i class="fas fa-spinner"></i>
-            <span id="progress-text">Phase 1: Technical Discovery - 0% Complete</span>
+            <span id="progress-text">Phase 1: Technical Discovery</span>
         </div>
     </div>
 
@@ -399,7 +399,8 @@
             progressBar.style.width = `${progressWidth}%`;
             
             // Update progress text
-            progressText.textContent = `Phase ${currentPhase + 1}: ${phaseNames[currentPhase]} - ${Math.floor(progress)}% Complete`;
+            progressText.textContent = `Phase ${currentPhase + 1}: ${phaseNames[currentPhase]}`;
+
         }
 
         setInterval(updateTimeline, 20);
