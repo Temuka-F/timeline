@@ -364,7 +364,7 @@
         const progressBar = document.getElementById('progress');
         const progressText = document.getElementById('progress-text');
         const phaseNames = ['Technical Discovery', 'Pilot Implementation', 'Training & Optimization', 'Scaling & Integration'];
-
+        
         // Add click handlers to phases
         phases.forEach((phase, index) => {
             phase.addEventListener('click', () => {
@@ -378,14 +378,26 @@
                 }
             });
         });
-
+        
         function updateTimeline() {
-            progress += 1.25;
+            progress += 1;
+            
+            // Ensure progress bar starts from beginning
+            if (progress === 1) {
+                phases.forEach(phase => {
+                    phase.classList.remove('complete');
+                    phase.classList.remove('active');
+                });
+                progressBar.style.width = '0%';
+            }
+        
             if (progress > 100) {
                 progress = 0;
                 phases[currentPhase].classList.remove('active');
                 phases[currentPhase].classList.add('complete');
                 currentPhase = (currentPhase + 1) % phases.length;
+                
+                // Reset all phases when cycle completes
                 if (currentPhase === 0) {
                     phases.forEach(phase => {
                         phase.classList.remove('complete');
@@ -396,15 +408,21 @@
             
             phases[currentPhase].classList.add('active');
             const progressWidth = ((currentPhase * 100 / phases.length) + (progress / phases.length));
-            progressBar.style.width = `${progressWidth}%`;
+            
+            // Ensure progress bar reaches full width
+            if (currentPhase === phases.length - 1 && progress > 95) {
+                progressBar.style.width = '100%';
+            } else {
+                progressBar.style.width = `${progressWidth}%`;
+            }
             
             // Update progress text
             progressText.textContent = `Phase ${currentPhase + 1}: ${phaseNames[currentPhase]}`;
-
         }
-
-        setInterval(updateTimeline, 20);
-
+        
+        // Set to 10 seconds total (100 steps * 25ms = 2.5s per phase * 4 phases = 10s total)
+        setInterval(updateTimeline, 25);
+        
         // Add hover animations
         phases.forEach(phase => {
             phase.addEventListener('mouseenter', () => {
@@ -415,7 +433,7 @@
                     });
                 }
             });
-
+        
             phase.addEventListener('mouseleave', () => {
                 if (!phase.classList.contains('active')) {
                     gsap.to(phase.querySelector('.phase-content'), {
