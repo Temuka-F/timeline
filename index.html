@@ -392,9 +392,11 @@
             }
         
             if (progress > 100) {
-                progress = 0;
+                // Mark current phase as complete before moving to next
                 phases[currentPhase].classList.remove('active');
                 phases[currentPhase].classList.add('complete');
+                
+                progress = 0;
                 currentPhase = (currentPhase + 1) % phases.length;
                 
                 // Reset all phases when cycle completes
@@ -404,6 +406,11 @@
                         phase.classList.remove('active');
                     });
                 }
+            }
+            
+            // Mark all previous phases as complete
+            for (let i = 0; i < currentPhase; i++) {
+                phases[i].classList.add('complete');
             }
             
             phases[currentPhase].classList.add('active');
