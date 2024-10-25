@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Timeline</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        #root { width: 100%; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { CheckCircle, Clock, Code, FileSearch, Layers, RefreshCw, Settings, Zap } = lucide;
+        
+        // Your complete ProjectTimeline component code here
+        const ProjectTimeline = () => {
+            const [activePhase, setActivePhase] = React.useState(0);
+            const [progress, setProgress] = React.useState(0);
+
+            const phases = [
+                {
+                    name: 'Technical Discovery',
+                    icon: FileSearch,
+                    duration: 'Weeks 1-2',
+                    milestones: [
+                        'System requirements analysis',
+                        'Architecture design',
+                        'Technical specifications',
+                        'Resource planning'
+                    ]
+                },
+                {
+                    name: 'Pilot Implementation',
+                    icon: Code,
+                    duration: 'Weeks 3-4',
+                    milestones: [
+                        'Initial setup',
+                        'Core functionality',
+                        'Test environment',
+                        'Pilot deployment'
+                    ]
+                },
+                {
+                    name: 'Training & Optimization',
+                    icon: RefreshCw,
+                    duration: 'Weeks 5-6',
+                    milestones: [
+                        'User training sessions',
+                        'System optimization',
+                        'Performance tuning',
+                        'Feedback integration'
+                    ]
+                },
+                {
+                    name: 'Scaling & Integration',
+                    icon: Layers,
+                    duration: 'Weeks 7-8',
+                    milestones: [
+                        'Full-scale deployment',
+                        'System integration',
+                        'Production migration',
+                        'Final validation'
+                    ]
+                }
+            ];
+
+            React.useEffect(() => {
+                const interval = setInterval(() => {
+                    setProgress((prev) => {
+                        if (prev >= 100) {
+                            setActivePhase((prevPhase) => (prevPhase + 1) % phases.length);
+                            return 0;
+                        }
+                        return prev + 2;
+                    });
+                }, 160);
+
+                return () => clearInterval(interval);
+            }, [phases.length]);
+
+            return (
+                <div className="w-full max-w-6xl mx-auto p-6">
+                    <div className="flex justify-between items-center mb-8">
+                        <h2 className="text-2xl font-bold">Project Timeline</h2>
+                        <div className="flex items-center space-x-2">
+                            <Clock className="w-5 h-5" />
+                            <span className="text-sm">8 weeks in 8 seconds</span>
+                        </div>
+                    </div>
+
+                    <div className="relative min-h-[400px]">
+                        <div className="absolute h-1 bg-gray-200 w-full top-10 rounded-full" />
+                        <div 
+                            className="absolute h-1 bg-blue-500 transition-all duration-200 top-10 rounded-full"
+                            style={{ width: `${(activePhase * 100 / phases.length) + (progress / phases.length)}%` }}
+                        />
+
+                        <div className="flex justify-between relative">
+                            {phases.map((phase, index) => {
+                                const PhaseIcon = phase.icon;
+                                const isActive = index === activePhase;
+                                const isComplete = index < activePhase;
+                                const isCurrent = index === activePhase;
+
+                                return (
+                                    <div key={phase.name} className="relative flex flex-col items-center">
+                                        <div 
+                                            className={`w-8 h-8 rounded-full flex items-center justify-center z-10 transition-all duration-300
+                                                ${isComplete ? 'bg-green-500' : isActive ? 'bg-blue-500' : 'bg-gray-200'}`}
+                                        >
+                                            {isComplete ? (
+                                                <CheckCircle className="w-6 h-6 text-white" />
+                                            ) : (
+                                                <PhaseIcon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-gray-500'}`} />
+                                            )}
+                                        </div>
+
+                                        <div className={`mt-4 text-center transition-all duration-300
+                                            ${isCurrent ? 'scale-110 text-blue-500' : 'text-gray-600'}`}>
+                                            <h3 className="font-semibold">{phase.name}</h3>
+                                            <p className="text-sm">{phase.duration}</p>
+                                        </div>
+
+                                        <div className={`absolute top-32 bg-white shadow-lg rounded-lg p-4 transition-all duration-300
+                                            ${isCurrent ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}
+                                            ${index === 0 ? 'left-0' : index === phases.length - 1 ? 'right-0' : 'left-1/2 -translate-x-1/2'}`}
+                                        >
+                                            <ul className="space-y-2">
+                                                {phase.milestones.map((milestone, idx) => (
+                                                    <li key={idx} className="flex items-center space-x-2">
+                                                        <Zap className="w-4 h-4 text-blue-500" />
+                                                        <span className="text-sm">{milestone}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center justify-center space-x-4 bg-white py-4">
+                        <Settings className="w-5 h-5 animate-spin text-blue-500" />
+                        <span className="text-sm font-medium">
+                            {phases[activePhase].name} Phase: {progress}% Complete
+                        </span>
+                    </div>
+                </div>
+            );
+        };
+
+        // Render the component
+        ReactDOM.render(<ProjectTimeline />, document.getElementById('root'));
+    </script>
+</body>
+</html>
