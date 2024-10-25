@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Timeline</title>
+    <title>Enhanced Project Timeline</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -12,21 +13,31 @@
             background: white;
         }
         .timeline {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
+            position: relative;
+        }
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
         }
         .timeline-track {
-            height: 4px;
-            background: #eee;
+            height: 6px;
+            background: #e9ecef;
             position: relative;
             margin: 50px 0;
+            border-radius: 3px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
         }
         .timeline-progress {
             position: absolute;
             height: 100%;
-            background: #0077ff;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            border-radius: 3px;
             transition: width 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
         .phases {
             display: flex;
@@ -37,42 +48,112 @@
             text-align: center;
             flex: 1;
             position: relative;
-            padding: 0 5px;
+            padding: 0 10px;
+            transition: all 0.3s ease;
         }
         .phase-dot {
-            width: 20px;
-            height: 20px;
-            background: #eee;
+            width: 24px;
+            height: 24px;
+            background: #fff;
+            border: 3px solid #e9ecef;
             border-radius: 50%;
-            margin: -12px auto 15px;
+            margin: -14px auto 15px;
             position: relative;
             z-index: 1;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .phase.active .phase-dot {
-            background: #0077ff;
+            background: #3498db;
+            border-color: #2980b9;
+            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(52,152,219,0.5);
         }
         .phase.complete .phase-dot {
-            background: #00c853;
+            background: #2ecc71;
+            border-color: #27ae60;
+        }
+        .phase.complete .phase-dot::after {
+            content: '✓';
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+        }
+        .phase-content {
+            opacity: 0.7;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+        .phase.active .phase-content {
+            opacity: 1;
+            transform: translateY(-5px);
         }
         .phase-name {
             font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 14px;
-            word-wrap: break-word;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #2c3e50;
         }
         .phase-duration {
-            font-size: 12px;
-            color: #666;
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+        .phase-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .phase.active .phase-details {
+            max-height: 200px;
+        }
+        .milestone-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+            font-size: 13px;
+            color: #34495e;
+            text-align: left;
+        }
+        .milestone-list li {
+            margin: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .milestone-list li::before {
+            content: '•';
+            color: #3498db;
+            position: absolute;
+            left: 5px;
         }
         .phase.active .phase-name {
-            color: #0077ff;
+            color: #3498db;
         }
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             .phase-name {
-                font-size: 11px;
+                font-size: 14px;
             }
             .phase-duration {
-                font-size: 9px;
+                font-size: 12px;
+            }
+            .milestone-list {
+                font-size: 11px;
+            }
+            .phase-dot {
+                width: 20px;
+                height: 20px;
+                margin: -12px auto 12px;
+            }
+        }
+        @media (max-width: 480px) {
+            .phase-name {
+                font-size: 12px;
+            }
+            .phase-duration {
+                font-size: 10px;
             }
             body {
                 padding: 10px;
@@ -88,23 +169,59 @@
         <div class="phases">
             <div class="phase" id="phase1">
                 <div class="phase-dot"></div>
-                <div class="phase-name">Technical Discovery</div>
-                <div class="phase-duration">Weeks 1-2</div>
+                <div class="phase-content">
+                    <div class="phase-name">Technical Discovery</div>
+                    <div class="phase-duration">Weeks 1-2</div>
+                    <div class="phase-details">
+                        <ul class="milestone-list">
+                            <li>Requirements Analysis</li>
+                            <li>System Architecture</li>
+                            <li>Technical Planning</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div class="phase" id="phase2">
                 <div class="phase-dot"></div>
-                <div class="phase-name">Pilot Implementation</div>
-                <div class="phase-duration">Weeks 3-4</div>
+                <div class="phase-content">
+                    <div class="phase-name">Pilot Implementation</div>
+                    <div class="phase-duration">Weeks 3-4</div>
+                    <div class="phase-details">
+                        <ul class="milestone-list">
+                            <li>Core Development</li>
+                            <li>Initial Testing</li>
+                            <li>Pilot Deployment</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div class="phase" id="phase3">
                 <div class="phase-dot"></div>
-                <div class="phase-name">Training & Optimization</div>
-                <div class="phase-duration">Weeks 5-6</div>
+                <div class="phase-content">
+                    <div class="phase-name">Training & Optimization</div>
+                    <div class="phase-duration">Weeks 5-6</div>
+                    <div class="phase-details">
+                        <ul class="milestone-list">
+                            <li>User Training</li>
+                            <li>Performance Tuning</li>
+                            <li>System Refinement</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div class="phase" id="phase4">
                 <div class="phase-dot"></div>
-                <div class="phase-name">Scaling & Integration</div>
-                <div class="phase-duration">Weeks 7-8</div>
+                <div class="phase-content">
+                    <div class="phase-name">Scaling & Integration</div>
+                    <div class="phase-duration">Weeks 7-8</div>
+                    <div class="phase-details">
+                        <ul class="milestone-list">
+                            <li>Full Deployment</li>
+                            <li>System Integration</li>
+                            <li>Final Validation</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -115,22 +232,26 @@
         const progressBar = document.getElementById('progress');
 
         function updateTimeline() {
-            progress += 2;
+            progress += 1;
             if (progress > 100) {
                 progress = 0;
                 phases[currentPhase].classList.remove('active');
                 phases[currentPhase].classList.add('complete');
                 currentPhase = (currentPhase + 1) % phases.length;
                 if (currentPhase === 0) {
-                    phases.forEach(phase => phase.classList.remove('complete'));
+                    phases.forEach(phase => {
+                        phase.classList.remove('complete');
+                        phase.classList.remove('active');
+                    });
                 }
             }
             
             phases[currentPhase].classList.add('active');
-            progressBar.style.width = ((currentPhase * 100 / phases.length) + (progress / phases.length)) + '%';
+            const progressWidth = ((currentPhase * 100 / phases.length) + (progress / phases.length));
+            progressBar.style.width = `${progressWidth}%`;
         }
 
-        setInterval(updateTimeline, 160);
+        setInterval(updateTimeline, 100);
     </script>
 </body>
 </html>
