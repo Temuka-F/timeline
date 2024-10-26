@@ -69,43 +69,50 @@
         }
         .rocket-container {
         position: absolute;
-        top: -12px;
-        right: -20px;
+        top: 50%;
+        left: 0;
         transform: translateY(-50%);
         z-index: 2;
+        pointer-events: none;
         }
 
         .rocket {
             color: #163A6D;
-            font-size: 24px;
-            transform: rotate(-90deg);
+            font-size: 18px;
+            transform: rotate(0deg);
             filter: drop-shadow(0 0 2px rgba(22, 58, 109, 0.3));
+            display: inline-block;
         }
         
         .smoke-particles {
             position: absolute;
             top: 50%;
-            right: 15px;
+            right: -15px;
             transform: translateY(-50%);
             pointer-events: none;
+            width: 30px;
+            height: 20px;
         }
         
         .smoke {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(22, 58, 109, 0.2);
+            width: 6px;
+            height: 6px;
+            background: rgba(22, 58, 109, 0.15);
             border-radius: 50%;
-            animation: smokeAnimation 2s infinite;
+            animation: smokeAnimation 1s ease-out infinite;
         }
         
         @keyframes smokeAnimation {
             0% {
                 transform: translate(0, 0) scale(1);
-                opacity: 0.8;
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0.3;
             }
             100% {
-                transform: translate(-20px, random(-10px, 10px)) scale(2);
+                transform: translate(-20px, calc(random(-5, 5) * 1px)) scale(3);
                 opacity: 0;
             }
         }
@@ -410,8 +417,8 @@
         // Add this code right after the variables above
         const rocketHtml = `
             <div class="rocket-container">
-                <div class="smoke-particles"></div>
                 <i class="fas fa-rocket rocket"></i>
+                <div class="smoke-particles"></div>
             </div>
         `;
         progressBar.insertAdjacentHTML('beforeend', rocketHtml);
@@ -478,7 +485,7 @@
                 
                 // Create smoke particles
                 if (progressWidth > 0 && progressWidth < 100) {
-                    if (Math.random() < 0.3) {
+                    if (Math.random() < 0.5) {
                         createSmoke();
                     }
                 }
@@ -489,18 +496,23 @@
         }
         function createSmoke() {
             const smokeContainer = document.querySelector('.smoke-particles');
-            const smoke = document.createElement('div');
-            smoke.className = 'smoke';
+            if (!smokeContainer) return;
             
-            // Random starting position
-            smoke.style.top = Math.random() * 10 - 5 + 'px';
-            
-            smokeContainer.appendChild(smoke);
-            
-            // Remove smoke particle after animation
-            smoke.addEventListener('animationend', () => {
-                smoke.remove();
-            });
+            // Create multiple smoke particles
+            for (let i = 0; i < 3; i++) {
+                const smoke = document.createElement('div');
+                smoke.className = 'smoke';
+                
+                // Random starting position
+                smoke.style.top = (Math.random() * 20 - 10) + 'px';
+                
+                smokeContainer.appendChild(smoke);
+                
+                // Remove smoke particle after animation
+                smoke.addEventListener('animationend', () => {
+                    smoke.remove();
+                });
+            }
         }
        
         // Set to 10 seconds total (100 steps * 25ms = 2.5s per phase * 4 phases = 10s total)
