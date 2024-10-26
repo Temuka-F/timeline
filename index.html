@@ -67,10 +67,10 @@
             transition: width 0.3s ease;
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
-        .rocket-container {
+       .rocket-container {
         position: absolute;
         top: 50%;
-        left: 0;
+        right: -5px;
         transform: translateY(-50%);
         z-index: 2;
         pointer-events: none;
@@ -79,7 +79,7 @@
         .rocket {
             color: #163A6D;
             font-size: 18px;
-            transform: rotate(0deg);
+            transform: rotate(180deg);
             filter: drop-shadow(0 0 2px rgba(22, 58, 109, 0.3));
             display: inline-block;
         }
@@ -87,7 +87,7 @@
         .smoke-particles {
             position: absolute;
             top: 50%;
-            right: -15px;
+            left: 20px;
             transform: translateY(-50%);
             pointer-events: none;
             width: 30px;
@@ -112,7 +112,7 @@
                 opacity: 0.3;
             }
             100% {
-                transform: translate(-20px, calc(random(-5, 5) * 1px)) scale(3);
+                transform: translate(20px, calc(random(-5, 5) * 1px)) scale(3);
                 opacity: 0;
             }
         }
@@ -417,8 +417,8 @@
         // Add this code right after the variables above
         const rocketHtml = `
             <div class="rocket-container">
-                <i class="fas fa-rocket rocket"></i>
                 <div class="smoke-particles"></div>
+                <i class="fas fa-rocket rocket"></i>
             </div>
         `;
         progressBar.insertAdjacentHTML('beforeend', rocketHtml);
