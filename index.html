@@ -406,7 +406,15 @@
         const progressBar = document.getElementById('progress');
         const progressText = document.getElementById('progress-text');
         const phaseNames = ['Technical Discovery', 'Pilot Implementation', 'Training & Optimization', 'Scaling & Integration'];
-        
+
+        // Add this code right after the variables above
+        const rocketHtml = `
+            <div class="rocket-container">
+                <div class="smoke-particles"></div>
+                <i class="fas fa-rocket rocket"></i>
+            </div>
+        `;
+        progressBar.insertAdjacentHTML('beforeend', rocketHtml);
         // Add click handlers to phases
         phases.forEach((phase, index) => {
             phase.addEventListener('click', () => {
@@ -494,14 +502,7 @@
                 smoke.remove();
             });
         }
-        const progressBar = document.querySelector('.timeline-progress');
-        const rocketHtml = `
-            <div class="rocket-container">
-                <div class="smoke-particles"></div>
-                <i class="fas fa-rocket rocket"></i>
-            </div>
-        `;
-        progressBar.insertAdjacentHTML('beforeend', rocketHtml);
+       
         // Set to 10 seconds total (100 steps * 25ms = 2.5s per phase * 4 phases = 10s total)
         setInterval(updateTimeline, 25);
         
