@@ -67,55 +67,6 @@
             transition: width 0.3s ease;
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
-       .rocket-container {
-        position: absolute;
-        top: 50%;
-        right: -5px;
-        transform: translateY(-50%);
-        z-index: 2;
-        pointer-events: none;
-        }
-
-        .rocket {
-            color: #163A6D;
-            font-size: 18px;
-            transform: rotate(180deg);
-            filter: drop-shadow(0 0 2px rgba(22, 58, 109, 0.3));
-            display: inline-block;
-        }
-        
-        .smoke-particles {
-            position: absolute;
-            top: 50%;
-            left: 20px;
-            transform: translateY(-50%);
-            pointer-events: none;
-            width: 30px;
-            height: 20px;
-        }
-        
-        .smoke {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: rgba(22, 58, 109, 0.15);
-            border-radius: 50%;
-            animation: smokeAnimation 1s ease-out infinite;
-        }
-        
-        @keyframes smokeAnimation {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 0.5;
-            }
-            50% {
-                opacity: 0.3;
-            }
-            100% {
-                transform: translate(20px, calc(random(-5, 5) * 1px)) scale(3);
-                opacity: 0;
-            }
-        }
         .phases {
             display: flex;
             justify-content: space-between;
@@ -413,15 +364,7 @@
         const progressBar = document.getElementById('progress');
         const progressText = document.getElementById('progress-text');
         const phaseNames = ['Technical Discovery', 'Pilot Implementation', 'Training & Optimization', 'Scaling & Integration'];
-
-        // Add this code right after the variables above
-        const rocketHtml = `
-            <div class="rocket-container">
-                <div class="smoke-particles"></div>
-                <i class="fas fa-rocket rocket"></i>
-            </div>
-        `;
-        progressBar.insertAdjacentHTML('beforeend', rocketHtml);
+        
         // Add click handlers to phases
         phases.forEach((phase, index) => {
             phase.addEventListener('click', () => {
@@ -479,42 +422,11 @@
             } else {
                 progressBar.style.width = `${progressWidth}%`;
             }
-            const rocket = document.querySelector('.rocket-container');
-            if (rocket) {
-                rocket.style.left = `${progressWidth}%`;
-                
-                // Create smoke particles
-                if (progressWidth > 0 && progressWidth < 100) {
-                    if (Math.random() < 0.5) {
-                        createSmoke();
-                    }
-                }
-            }
             
             // Update progress text
             progressText.textContent = `Phase ${currentPhase + 1}: ${phaseNames[currentPhase]}`;
         }
-        function createSmoke() {
-            const smokeContainer = document.querySelector('.smoke-particles');
-            if (!smokeContainer) return;
-            
-            // Create multiple smoke particles
-            for (let i = 0; i < 3; i++) {
-                const smoke = document.createElement('div');
-                smoke.className = 'smoke';
-                
-                // Random starting position
-                smoke.style.top = (Math.random() * 20 - 10) + 'px';
-                
-                smokeContainer.appendChild(smoke);
-                
-                // Remove smoke particle after animation
-                smoke.addEventListener('animationend', () => {
-                    smoke.remove();
-                });
-            }
-        }
-       
+        
         // Set to 10 seconds total (100 steps * 25ms = 2.5s per phase * 4 phases = 10s total)
         setInterval(updateTimeline, 25);
         
